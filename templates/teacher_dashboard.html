@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(-45deg,#1e3c72,#2a5298,#141e30,#243b55);
+    background-size:400% 400%;
+    animation:gradientBG 15s ease infinite;
+    color:white;
+}
+
+@keyframes gradientBG{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* NAV */
+.nav{
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(12px);
+    padding:20px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:600;
+}
+
+.nav a{
+    color:#00ffd5;
+    text-decoration:none;
+}
+
+/* CONTAINER */
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    padding:40px 0;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(18px);
+    padding:35px;
+    border-radius:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    margin-bottom:35px;
+    transition:0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+h3{
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+/* INPUTS */
+input, select, button{
+    padding:12px 15px;
+    border-radius:12px;
+    border:none;
+    margin-right:10px;
+    margin-bottom:12px;
+    font-size:14px;
+}
+
+input, select{
+    width:250px;
+}
+
+button{
+    background:linear-gradient(45deg,#00ffd5,#00bfff);
+    color:black;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s ease;
+}
+
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 10px 25px rgba(0,255,213,0.4);
+}
+
+/* COURSE LIST */
+.course-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.course-box{
+    background:rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:16px;
+    min-width:250px;
+    transition:0.3s ease;
+}
+
+.course-box:hover{
+    background:rgba(0,255,213,0.15);
+    transform:translateY(-4px);
+}
+
+.course-box a{
+    display:inline-block;
+    margin-top:10px;
+    color:#00ffd5;
+    text-decoration:none;
+    font-weight:500;
+}
+
+.empty-text{
+    opacity:0.8;
+    font-style:italic;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== NAV ===== -->
+<div class="nav">
+    <span>👨‍🏫 {{ name }}</span>
+    <a href="/logout">Logout</a>
+</div>
+
+<div class="container">
+
+    <!-- ===== CREATE COURSE ===== -->
+    <div class="card">
+        <h3>📘 Create Course</h3>
+        <form method="post" action="/create-course">
+            <input name="course" placeholder="Course Name" required>
+            <button>Create</button>
+        </form>
+    </div>
+
+    <!-- ===== ENROLL STUDENT ===== -->
+    <div class="card">
+        <h3>👨‍🎓 Enroll Student</h3>
+
+        <form method="post" action="/enroll">
+
+            <div>
+                <label>Select Student</label><br>
+                <select name="student" required>
+                    <option value="">-- Select Student --</option>
+                    {% for s in students %}
+                        <option value="{{ s[0] }}">{{ s[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label>Select Course</label><br>
+                <select name="course_id" required>
+                    <option value="">-- Select Course --</option>
+                    {% for c in courses %}
+                        <option value="{{ c[0] }}">{{ c[1] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button>Enroll</button>
+        </form>
+    </div>
+
+    <!-- ===== MANAGE COURSES ===== -->
+    <div class="card">
+        <h3>⚙️ Manage Courses</h3>
+
+        <div class="course-list">
+        {% for c in courses %}
+            <div class="course-box">
+                <strong>{{ c[1] }}</strong>
+                <br>
+                <a href="/teacher/course/{{ c[0] }}">
+                    Manage Course →
+                </a>
+            </div>
+        {% else %}
+            <p class="empty-text">No courses created yet.</p>
+        {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

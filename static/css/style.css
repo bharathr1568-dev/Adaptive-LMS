@@ -1,0 +1,402 @@
+/* ================= BASE ================= */
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial;
+    background: #f5f7fb;
+}
+
+/* ================= NAV ================= */
+
+.nav {
+    background: #1e3a8a;
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav small {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* ================= LAYOUT ================= */
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+}
+
+/* ================= CARD ================= */
+
+.card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+    animation: fadeIn 0.6s ease;
+}
+
+.card p {
+    margin-top: 0;
+    color: #374151;
+}
+
+/* ================= BUTTON ================= */
+
+button {
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
+
+/* ================= INPUT ================= */
+
+select, input {
+    padding: 8px;
+    margin: 5px 0;
+    width: 100%;
+}
+
+/* ================= VIDEO PLAYER ================= */
+
+video {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-wrapper {
+    width: 100%;
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    transition: width 0.25s ease-out;
+}
+
+#progressText {
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* ================= TABLE ================= */
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.styled-table th {
+    background: #2563eb;
+    color: white;
+    padding: 12px;
+}
+
+.styled-table td {
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.styled-table tr:hover {
+    background-color: #f1f5f9;
+}
+
+/* ================= AUTH ================= */
+
+.auth-body {
+    background: linear-gradient(135deg,#1e3a8a,#2563eb);
+    height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.auth-card {
+    background:white;
+    padding:30px;
+    width:320px;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.auth-card input,
+.auth-card select {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+.auth-card button {
+    width:100%;
+    padding:10px;
+    background:#2563eb;
+    color:white;
+    border:none;
+    border-radius:6px;
+}
+
+.auth-card button:hover {
+    background:#1e40af;
+}
+
+/* ================= ATTENTION STATUS ================= */
+
+.attention-box {
+    margin-top: 16px;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.attention-box.success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #22c55e;
+}
+
+.attention-box.warning {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #f97316;
+}
+
+.attention-box.danger {
+    background: #fee2e2;
+    color: #7f1d1d;
+    border: 1px solid #ef4444;
+}
+
+.attention-box.info {
+    background: #e0f2fe;
+    color: #075985;
+    border: 1px solid #38bdf8;
+}
+
+/* ================= CAMERA IFRAME (IMPORTANT) ================= */
+
+#gaze-frame {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+
+    /* 🔥 BIG CAMERA SIZE */
+    width: 480px;
+    height: 360px;
+
+    border-radius: 14px;
+    overflow: hidden;
+    border: 3px solid #2563eb;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    z-index: 999;
+    background: black;
+}
+
+/* ================= QUIZ PAGE ================= */
+
+.quiz-card{
+    width: 90%;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: white;
+    padding: 35px;
+    border-radius: 14px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.quiz-title{
+    text-align:center;
+    margin-bottom:25px;
+    color:#2c3e50;
+}
+
+.quiz-form{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:15px;
+}
+
+.quiz-form input{
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:15px;
+}
+
+.quiz-form input:focus{
+    outline:none;
+    border-color:#3498db;
+    box-shadow:0 0 5px rgba(52,152,219,0.4);
+}
+
+.quiz-form button{
+    grid-column: span 3;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    background:#27ae60;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.quiz-form button:hover{
+    background:#219150;
+}
+
+.quiz-note{
+    text-align:center;
+    margin-top:20px;
+    color:#777;
+}
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    padding:10px 18px;
+    background:#3498db;
+    color:white;
+    border-radius:8px;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.back-btn:hover{
+    background:#2c80b4;
+}
+/* ===== COURSE VIDEO PLAYER ===== */
+video{
+    width:100%;
+    max-height:520px;
+    border-radius:14px;
+    margin-top:15px;
+    background:black;
+}
+
+
+/* Progress bar spacing */
+.progress-wrapper {
+    margin-top: 15px;
+}
+.attention-box{
+    margin-top:20px;
+    padding:18px;
+    border-radius:12px;
+    font-size:16px;
+    line-height:1.6;
+}
+
+.attention-box.info{ background:#e0f2fe; color:#0369a1; }
+.attention-box.success{ background:#dcfce7; color:#166534; }
+.attention-box.warning{ background:#fef9c3; color:#854d0e; }
+.attention-box.danger{ background:#fee2e2; color:#991b1b; }
+
+#gaze-container{
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    bottom: 0;
+    right: 0;
+    opacity: 0;          /* invisible */
+    pointer-events: none; /* not clickable */
+    z-index: -999;       /* behind everything */
+}
+
+#gaze-container iframe{
+    width: 1px;
+    height: 1px;
+    border: none;
+}
+
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== QUIZ IMAGE STYLE ===== */
+
+.quiz-card {
+    display: block !important;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.quiz-question {
+    margin-bottom: 20px;
+}
+
+.quiz-option-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+/* square radio look */
+.quiz-option-row input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #16a34a;
+}
+
+/* letter circle */
+.option-letter {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #16a34a;
+    color: #16a34a;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* option text */
+.option-text {
+    font-size: 16px;
+}
+
+/* submit button */
+.quiz-submit-btn {
+    margin-top: 15px;
+    padding: 8px 18px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.quiz-submit-btn:hover {
+    background: #15803d;
+}

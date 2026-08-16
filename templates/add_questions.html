@@ -1,0 +1,30 @@
+<link rel="stylesheet" href="/static/css/style.css">
+
+<div class="quiz-card">
+
+    <h2 class="quiz-title">📝 Add Quiz Questions</h2>
+
+    <form method="post" class="quiz-form">
+
+        <input name="question" placeholder="Enter Question" required>
+
+        <input name="a" placeholder="Option A" required>
+        <input name="b" placeholder="Option B" required>
+        <input name="c" placeholder="Option C" required>
+
+        <input name="d" placeholder="Option D" required>
+        <input name="correct" placeholder="Correct Option (A/B/C/D)" required>
+
+        <button>Add Question</button>
+
+    </form>
+
+    <p class="quiz-note">
+        You can add multiple questions. Close this page when finished.
+    </p>
+    <a href="/teacher/course/{{ course_id }}" class="back-btn">
+    ⬅ Back to Course
+</a>
+
+
+</div>

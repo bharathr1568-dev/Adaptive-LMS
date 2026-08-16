@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ quiz[0] }}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins',sans-serif;
+    }
+
+    body{
+        min-height:100vh;
+        background:linear-gradient(-45deg,#1e3c72,#2a5298,#141e30,#243b55);
+        background-size:400% 400%;
+        animation:gradientBG 15s ease infinite;
+        color:white;
+    }
+
+    @keyframes gradientBG{
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
+    }
+
+    /* NAV */
+    .nav{
+        background:rgba(0,0,0,0.4);
+        backdrop-filter:blur(10px);
+        padding:15px 40px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .nav a{
+        color:#00ffd5;
+        text-decoration:none;
+        font-weight:500;
+    }
+
+    .container{
+        padding:40px 8%;
+    }
+
+    .card{
+        background:rgba(255,255,255,0.08);
+        backdrop-filter:blur(15px);
+        padding:30px;
+        border-radius:18px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.4);
+        transition:0.3s;
+    }
+
+    .card:hover{
+        transform:translateY(-6px);
+    }
+
+    .quiz-card h4{
+        margin-bottom:15px;
+        font-weight:600;
+    }
+
+    .question-block{
+        margin-bottom:30px;
+        animation:fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp{
+        from{opacity:0;transform:translateY(15px);}
+        to{opacity:1;transform:translateY(0);}
+    }
+
+    /* OPTION STYLE */
+    .option{
+        display:block;
+        padding:12px 15px;
+        margin-bottom:10px;
+        border-radius:12px;
+        background:rgba(255,255,255,0.06);
+        cursor:pointer;
+        transition:0.3s;
+        border:1px solid rgba(255,255,255,0.15);
+    }
+
+    .option:hover{
+        background:rgba(0,255,213,0.2);
+        transform:translateX(6px);
+    }
+
+    .option input{
+        margin-right:8px;
+        accent-color:#00ffd5;
+    }
+
+    .submit-btn{
+        padding:12px 25px;
+        border-radius:25px;
+        border:none;
+        background:linear-gradient(45deg,#00ffd5,#00bfff);
+        color:black;
+        font-weight:600;
+        cursor:pointer;
+        transition:0.3s;
+        margin-top:10px;
+    }
+
+    .submit-btn:hover{
+        transform:scale(1.08);
+        box-shadow:0 0 15px #00ffd5;
+    }
+
+    </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <span>📝 {{ quiz[0] }}</span>
+    <a href="/course/{{ course_id }}">⬅ Back</a>
+</div>
+
+<div class="container">
+<div class="card quiz-card">
+
+<form method="post">
+
+{% for q in questions %}
+    <div class="question-block">
+        <h4>{{ loop.index }}. {{ q[1] }}</h4>
+
+        {% for opt in ['A','B','C','D'] %}
+            <label class="option">
+                <input type="radio" name="q{{ q[0] }}" value="{{ opt }}" required>
+                {{ opt }}. {{ q[loop.index + 1] }}
+            </label>
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<button class="submit-btn">🚀 Submit Quiz</button>
+
+</form>
+
+</div>
+</div>
+
+</body>
+</html>

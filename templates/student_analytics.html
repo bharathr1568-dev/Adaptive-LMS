@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Analytics</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins',sans-serif;
+    }
+
+    body{
+        min-height:100vh;
+        background:linear-gradient(-45deg,#1e3c72,#2a5298,#141e30,#243b55);
+        background-size:400% 400%;
+        animation:gradientBG 15s ease infinite;
+        color:white;
+    }
+
+    @keyframes gradientBG{
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
+    }
+
+    /* NAV */
+    .nav{
+        background:rgba(0,0,0,0.4);
+        backdrop-filter:blur(10px);
+        padding:15px 40px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .nav a{
+        color:#00ffd5;
+        text-decoration:none;
+        font-weight:500;
+    }
+
+    .container{
+        padding:40px 8%;
+    }
+
+    .card{
+        background:rgba(255,255,255,0.08);
+        backdrop-filter:blur(15px);
+        padding:30px;
+        border-radius:18px;
+        box-shadow:0 10px 40px rgba(0,0,0,0.4);
+        margin-bottom:30px;
+        transition:0.3s;
+    }
+
+    .card:hover{
+        transform:translateY(-6px);
+    }
+
+    h2{
+        margin-bottom:20px;
+    }
+
+    /* STAT BOXES */
+    .stats-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+        gap:20px;
+    }
+
+    .stat-box{
+        background:linear-gradient(135deg,#00ffd5,#00bfff);
+        padding:20px;
+        border-radius:14px;
+        color:black;
+        text-align:center;
+        font-weight:600;
+        transition:0.3s;
+    }
+
+    .stat-box:hover{
+        transform:scale(1.05);
+    }
+
+    .stat-value{
+        font-size:26px;
+        margin-top:8px;
+    }
+
+    canvas{
+        margin-top:20px;
+        background:rgba(255,255,255,0.05);
+        border-radius:12px;
+        padding:15px;
+    }
+
+    </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <span>📊 {{ name }} - Learning Analytics</span>
+    <a href="/student">⬅ Dashboard</a>
+</div>
+
+<div class="container">
+
+<!-- ===== OVERALL STATS ===== -->
+<div class="card">
+    <h2>📈 Overall Performance</h2>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            🎥 Video Completion
+            <div class="stat-value">{{ avg_video }}%</div>
+        </div>
+
+        <div class="stat-box">
+            👀 Attention Level
+            <div class="stat-value">{{ avg_attention }}%</div>
+        </div>
+
+        <div class="stat-box">
+            📝 Quiz Score
+            <div class="stat-value">{{ avg_quiz }}</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== VIDEO CHART ===== -->
+<div class="card">
+    <h2>🎥 Video Completion per Course</h2>
+    <canvas id="videoChart"></canvas>
+</div>
+
+<!-- ===== ATTENTION CHART ===== -->
+<div class="card">
+    <h2>👀 Attention Level per Course</h2>
+    <canvas id="attentionChart"></canvas>
+</div>
+
+<!-- ===== QUIZ CHART ===== -->
+<div class="card">
+    <h2>📝 Quiz Scores per Course</h2>
+    <canvas id="quizChart"></canvas>
+</div>
+
+</div>
+
+<script>
+const courses = {{ course_names|tojson }};
+const videoData = {{ video_data|tojson }};
+const attentionData = {{ attention_data|tojson }};
+const quizData = {{ quiz_data|tojson }};
+
+const commonOptions = {
+    responsive:true,
+    plugins:{
+        legend:{ labels:{ color:"white" } }
+    },
+    scales:{
+        x:{ ticks:{ color:"white" } },
+        y:{ ticks:{ color:"white" } }
+    }
+};
+
+// VIDEO GRAPH
+new Chart(document.getElementById("videoChart"), {
+    type:'bar',
+    data:{
+        labels:courses,
+        datasets:[{
+            label:'Video %',
+            data:videoData,
+            backgroundColor:'#00ffd5'
+        }]
+    },
+    options:commonOptions
+});
+
+// ATTENTION GRAPH
+new Chart(document.getElementById("attentionChart"), {
+    type:'line',
+    data:{
+        labels:courses,
+        datasets:[{
+            label:'Attention %',
+            data:attentionData,
+            borderColor:'#00ffd5',
+            backgroundColor:'rgba(0,255,213,0.2)',
+            tension:0.4
+        }]
+    },
+    options:commonOptions
+});
+
+// QUIZ GRAPH
+new Chart(document.getElementById("quizChart"), {
+    type:'bar',
+    data:{
+        labels:courses,
+        datasets:[{
+            label:'Quiz Score',
+            data:quizData,
+            backgroundColor:'#00bfff'
+        }]
+    },
+    options:commonOptions
+});
+</script>
+
+</body>
+</html>

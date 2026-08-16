@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Parent Dashboard</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    background:
+        linear-gradient(
+            -45deg,
+            #1e3c72,
+            #2a5298,
+            #141e30,
+            #243b55
+        );
+
+    background-size:400% 400%;
+
+    animation:
+        gradientBG 15s ease infinite;
+
+    color:white;
+}
+
+@keyframes gradientBG{
+
+    0%{
+        background-position:0% 50%;
+    }
+
+    50%{
+        background-position:100% 50%;
+    }
+
+    100%{
+        background-position:0% 50%;
+    }
+
+}
+
+
+/* =====================================================
+   NAV
+===================================================== */
+
+.nav{
+
+    background:
+        rgba(0,0,0,0.4);
+
+    backdrop-filter:
+        blur(12px);
+
+    padding:
+        20px 50px;
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    font-weight:
+        600;
+}
+
+.nav a{
+
+    color:#00ffd5;
+
+    text-decoration:none;
+}
+
+.nav a:hover{
+
+    color:white;
+}
+
+
+/* =====================================================
+   CONTAINER
+===================================================== */
+
+.container{
+
+    width:95%;
+
+    max-width:1400px;
+
+    margin:auto;
+
+    padding:40px 0;
+}
+
+
+/* =====================================================
+   CARD
+===================================================== */
+
+.card{
+
+    background:
+        rgba(255,255,255,0.08);
+
+    backdrop-filter:
+        blur(18px);
+
+    padding:35px;
+
+    border-radius:22px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,0.5);
+
+    margin-bottom:35px;
+
+    transition:
+        0.3s ease;
+}
+
+.card:hover{
+
+    transform:
+        translateY(-5px);
+}
+
+h2,
+h3{
+
+    margin-bottom:
+        20px;
+
+    font-weight:
+        600;
+}
+
+
+/* =====================================================
+   METRICS
+===================================================== */
+
+.metrics{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+}
+
+.metric-box{
+
+    background:
+        rgba(255,255,255,0.05);
+
+    padding:20px;
+
+    border-radius:16px;
+
+    flex:1;
+
+    min-width:220px;
+
+    transition:
+        0.3s ease;
+}
+
+.metric-box:hover{
+
+    background:
+        rgba(0,255,213,0.15);
+}
+
+.metric-box span{
+
+    font-size:
+        22px;
+
+    font-weight:
+        600;
+
+    display:block;
+
+    margin-top:
+        5px;
+
+    color:
+        #00ffd5;
+}
+
+
+/* =====================================================
+   🤖 AI PARENT INSIGHT
+===================================================== */
+
+.ai-card{
+
+    border:
+        1px solid
+        rgba(0,255,213,0.25);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,255,213,0.10),
+            rgba(0,191,255,0.08),
+            rgba(255,255,255,0.06)
+        );
+
+    box-shadow:
+        0 0 35px
+        rgba(0,255,213,0.10);
+}
+
+.ai-header{
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin-bottom:
+        22px;
+}
+
+.ai-title{
+
+    display:flex;
+
+    align-items:
+        center;
+
+    gap:
+        14px;
+}
+
+.ai-icon{
+
+    width:52px;
+
+    height:52px;
+
+    border-radius:15px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:27px;
+
+    background:
+        rgba(0,255,213,0.12);
+
+    border:
+        1px solid
+        rgba(0,255,213,0.25);
+}
+
+.ai-subtitle{
+
+    font-size:
+        12px;
+
+    opacity:
+        0.6;
+
+    margin-top:
+        -14px;
+}
+
+.ai-badge{
+
+    padding:
+        7px 14px;
+
+    border-radius:
+        20px;
+
+    font-size:
+        11px;
+
+    color:
+        #00ffd5;
+
+    background:
+        rgba(0,255,213,0.10);
+
+    border:
+        1px solid
+        rgba(0,255,213,0.2);
+}
+
+
+/* SUMMARY */
+
+.ai-summary{
+
+    padding:
+        20px;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(255,255,255,0.06);
+
+    line-height:
+        1.7;
+
+    margin-bottom:
+        20px;
+}
+
+
+/* AI STATS */
+
+.ai-stats{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:
+        15px;
+
+    margin-bottom:
+        20px;
+}
+
+.ai-stat{
+
+    display:flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    padding:
+        16px;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(255,255,255,0.06);
+}
+
+.ai-stat-icon{
+
+    font-size:
+        22px;
+}
+
+.ai-stat strong{
+
+    display:block;
+
+    font-size:
+        20px;
+
+    color:
+        #00ffd5;
+}
+
+.ai-stat small{
+
+    opacity:
+        0.6;
+
+    font-size:
+        11px;
+}
+
+
+/* AI ANALYSIS */
+
+.ai-analysis-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:
+        15px;
+
+    margin-bottom:
+        20px;
+}
+
+.ai-analysis-box{
+
+    padding:
+        18px;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(255,255,255,0.05);
+}
+
+.ai-analysis-box h3{
+
+    margin-bottom:
+        10px;
+
+    font-size:
+        14px;
+
+    color:
+        #00ffd5;
+}
+
+.ai-analysis-box p{
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+
+    opacity:
+        0.85;
+}
+
+
+/* RECOMMENDATION */
+
+.ai-recommendation{
+
+    padding:
+        20px;
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(0,255,213,0.06);
+
+    margin-bottom:
+        20px;
+}
+
+.ai-recommendation h3{
+
+    font-size:
+        15px;
+
+    margin-bottom:
+        10px;
+
+    color:
+        #00ffd5;
+}
+
+.ai-recommendation p{
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* AI ACTION */
+
+.ai-actions{
+
+    display:flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        15px;
+}
+
+#aiStatus{
+
+    font-size:
+        12px;
+
+    opacity:
+        0.7;
+}
+
+#aiInsightButton{
+
+    border:none;
+
+    padding:
+        11px 20px;
+
+    border-radius:
+        25px;
+
+    background:
+        linear-gradient(
+            45deg,
+            #00ffd5,
+            #00bfff
+        );
+
+    color:
+        #071a2e;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.3s;
+}
+
+#aiInsightButton:hover{
+
+    transform:
+        scale(1.04);
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,255,213,0.3);
+}
+
+#aiInsightButton:disabled{
+
+    opacity:
+        0.6;
+
+    cursor:
+        wait;
+}
+
+
+/* =====================================================
+   ALERT
+===================================================== */
+
+.alert{
+
+    background:
+        rgba(220,38,38,0.2);
+
+    border-left:
+        4px solid #dc2626;
+
+    padding:
+        12px 15px;
+
+    border-radius:
+        10px;
+
+    margin-bottom:
+        10px;
+}
+
+.success{
+
+    background:
+        rgba(34,197,94,0.2);
+
+    border-left:
+        4px solid #22c55e;
+
+    padding:
+        12px 15px;
+
+    border-radius:
+        10px;
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.table-wrapper{
+
+    overflow-x:auto;
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:
+        collapse;
+
+    border-radius:
+        16px;
+
+    overflow:hidden;
+}
+
+th,
+td{
+
+    padding:
+        14px;
+
+    text-align:
+        center;
+}
+
+th{
+
+    background:
+        rgba(0,255,213,0.25);
+
+    font-weight:
+        600;
+}
+
+tr{
+
+    background:
+        rgba(255,255,255,0.06);
+
+    transition:
+        0.2s ease;
+}
+
+tr:hover{
+
+    background:
+        rgba(0,255,213,0.15);
+}
+
+td{
+
+    font-size:
+        14px;
+}
+
+
+/* =====================================================
+   ANALYTICS BUTTON
+===================================================== */
+
+.analytics-btn{
+
+    display:inline-block;
+
+    padding:
+        8px 14px;
+
+    border-radius:
+        20px;
+
+    background:
+        linear-gradient(
+            45deg,
+            #00ffd5,
+            #00bfff
+        );
+
+    color:
+        #071a2e;
+
+    text-decoration:
+        none;
+
+    font-size:
+        12px;
+
+    font-weight:
+        700;
+
+    transition:
+        0.3s;
+}
+
+.analytics-btn:hover{
+
+    transform:
+        scale(1.05);
+
+    box-shadow:
+        0 6px 20px
+        rgba(0,255,213,0.3);
+}
+
+
+/* =====================================================
+   EMPTY
+===================================================== */
+
+.empty{
+
+    opacity:
+        0.8;
+
+    font-style:
+        italic;
+
+    padding:
+        20px;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media(max-width:800px){
+
+    .ai-stats{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .ai-analysis-grid{
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .ai-header{
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            12px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAV
+===================================================== -->
+
+<div class="nav">
+
+    <span>
+        👨‍👩‍👧 Parent Dashboard
+    </span>
+
+    <a href="/logout">
+        Logout
+    </a>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     STUDENT OVERVIEW
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        Monitoring Student:
+        {{ child_name }}
+    </h2>
+
+
+    <div class="metrics">
+
+        <div class="metric-box">
+
+            📚 Average Video Progress
+
+            <span>
+                {{ avg_video }}%
+            </span>
+
+        </div>
+
+
+        <div class="metric-box">
+
+            🎯 Average Attention
+
+            <span>
+                {{ avg_attention }}%
+            </span>
+
+        </div>
+
+
+        <div class="metric-box">
+
+            📝 Average Quiz Score
+
+            <span>
+                {{ avg_score }}%
+            </span>
+
+        </div>
+
+
+        <div class="metric-box">
+
+            ⏰ Most Distracted Time
+
+            <span>
+                {{ fatigue_hour }}
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     🤖 AI LEARNING UPDATE
+===================================================== -->
+
+<div class="card ai-card">
+
+
+    <div class="ai-header">
+
+        <div class="ai-title">
+
+            <span class="ai-icon">
+                🤖
+            </span>
+
+            <div>
+
+                <h2>
+                    AI Learning Update
+                </h2>
+
+                <p class="ai-subtitle">
+                    A simple learning summary for parents
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <span class="ai-badge">
+            ✨ GROQ AI
+        </span>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div
+        id="aiSummary"
+        class="ai-summary"
+    >
+
+        Click
+        <strong>Generate Update</strong>
+        to understand your child's current learning progress.
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="ai-stats">
+
+
+        <div class="ai-stat">
+
+            <span class="ai-stat-icon">
+                📚
+            </span>
+
+            <div>
+
+                <strong id="aiVideo">
+                    --
+                </strong>
+
+                <small>
+                    Video Progress
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="ai-stat">
+
+            <span class="ai-stat-icon">
+                🎯
+            </span>
+
+            <div>
+
+                <strong id="aiAttention">
+                    --
+                </strong>
+
+                <small>
+                    Attention
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="ai-stat">
+
+            <span class="ai-stat-icon">
+                📝
+            </span>
+
+            <div>
+
+                <strong id="aiQuiz">
+                    --
+                </strong>
+
+                <small>
+                    Quiz Performance
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- AI OBSERVATIONS -->
+
+    <div class="ai-analysis-grid">
+
+
+        <div class="ai-analysis-box">
+
+            <h3>
+                🌟 Strength
+            </h3>
+
+            <p id="aiStrength">
+                --
+            </p>
+
+        </div>
+
+
+        <div class="ai-analysis-box">
+
+            <h3>
+                🎯 Attention
+            </h3>
+
+            <p id="aiAttentionText">
+                --
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- RECOMMENDATION -->
+
+    <div class="ai-recommendation">
+
+        <h3>
+            💡 Suggestion for You
+        </h3>
+
+        <p id="aiRecommendation">
+            Generate an update to receive a practical suggestion.
+        </p>
+
+    </div>
+
+
+    <!-- ENCOURAGEMENT -->
+
+    <div class="ai-recommendation">
+
+        <h3>
+            🌱 Keep Going
+        </h3>
+
+        <p id="aiEncouragement">
+            Small and consistent learning habits make a big difference.
+        </p>
+
+    </div>
+
+
+    <!-- ACTION -->
+
+    <div class="ai-actions">
+
+        <span id="aiStatus">
+            Ready to generate a learning update.
+        </span>
+
+
+        <button
+            type="button"
+            id="aiInsightButton"
+            onclick="generateParentInsight()"
+        >
+
+            ✨ Generate Update
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     LOW FOCUS ALERTS
+===================================================== -->
+
+<div class="card">
+
+    <h3>
+        ⚠️ Low Focus Alerts
+    </h3>
+
+
+    {% if alerts %}
+
+        {% for a in alerts %}
+
+            <div class="alert">
+
+                Low focus detected in
+                <b>{{ a }}</b>
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="success">
+
+            🎉 No low focus alerts detected.
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+<!-- =====================================================
+     COURSE ANALYTICS
+===================================================== -->
+
+<div class="card">
+
+    <h2>
+        📊 Course Analytics
+    </h2>
+
+
+    {% if course_data %}
+
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Course
+                    </th>
+
+                    <th>
+                        Video Progress
+                    </th>
+
+                    <th>
+                        Attention
+                    </th>
+
+                    <th>
+                        Quiz Score
+                    </th>
+
+                    <th>
+                        Analytics
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+            {% for course in course_data %}
+
+                <tr>
+
+
+                    <td>
+                        <strong>
+                            {{ course.course_name }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+                        {{ course.video }}%
+                    </td>
+
+
+                    <td>
+                        {{ course.attention }}%
+                    </td>
+
+
+                    <td>
+                        {{ course.quiz }}%
+                    </td>
+
+
+                    <td>
+
+                        <a
+                            href="/parent/child-analytics/{{ child_id }}"
+                            class="analytics-btn"
+                        >
+
+                            📊 View Analytics
+
+                        </a>
+
+                    </td>
+
+
+                </tr>
+
+            {% endfor %}
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    {% else %}
+
+        <div class="empty">
+
+            No course data available yet.
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+async function generateParentInsight(){
+
+
+    console.log(
+        "PARENT AI BUTTON CLICKED"
+    );
+
+
+    const button =
+        document.getElementById(
+            "aiInsightButton"
+        );
+
+
+    const status =
+        document.getElementById(
+            "aiStatus"
+        );
+
+
+    const summary =
+        document.getElementById(
+            "aiSummary"
+        );
+
+
+    const strength =
+        document.getElementById(
+            "aiStrength"
+        );
+
+
+    const attention =
+        document.getElementById(
+            "aiAttentionText"
+        );
+
+
+    const recommendation =
+        document.getElementById(
+            "aiRecommendation"
+        );
+
+
+    const encouragement =
+        document.getElementById(
+            "aiEncouragement"
+        );
+
+
+    /* =================================================
+       LOADING
+    ================================================= */
+
+    button.disabled =
+        true;
+
+    button.innerText =
+        "⏳ Analyzing...";
+
+
+    status.innerText =
+        "🤖 AI is analyzing learning progress...";
+
+
+    summary.innerText =
+        "Preparing your child's learning update...";
+
+
+    strength.innerText =
+        "Analyzing...";
+
+
+    attention.innerText =
+        "Analyzing...";
+
+
+    recommendation.innerText =
+        "Generating suggestion...";
+
+
+    encouragement.innerText =
+        "Generating encouragement...";
+
+
+    try{
+
+
+        /* =============================================
+           API ENDPOINT
+        ============================================= */
+
+        const url =
+            "/parent/ai-insight/{{ child_id }}";
+
+
+        console.log(
+            "Calling:",
+            url
+        );
+
+
+        const response =
+            await fetch(
+
+                url,
+
+                {
+
+                    method:"GET",
+
+                    headers:{
+                        "Accept":
+                            "application/json"
+                    }
+
+                }
+
+            );
+
+
+        console.log(
+            "Response:",
+            response.status
+        );
+
+
+        /* =============================================
+           READ RESPONSE
+        ============================================= */
+
+        const text =
+            await response.text();
+
+
+        console.log(
+            "Raw AI response:",
+            text
+        );
+
+
+        let data;
+
+
+        try{
+
+            data =
+                JSON.parse(text);
+
+        }
+
+        catch(error){
+
+            throw new Error(
+                "Server did not return valid JSON."
+            );
+
+        }
+
+
+        /* =============================================
+           ERROR
+        ============================================= */
+
+        if(!response.ok){
+
+            throw new Error(
+                data.error ||
+                "AI request failed."
+            );
+
+        }
+
+
+        if(data.success === false){
+
+            throw new Error(
+                data.error ||
+                "Unable to generate update."
+            );
+
+        }
+
+
+        /* =============================================
+           UPDATE STATS
+        ============================================= */
+
+        document.getElementById(
+            "aiVideo"
+        ).innerText =
+            (data.avg_video ?? 0) + "%";
+
+
+        document.getElementById(
+            "aiAttention"
+        ).innerText =
+            (data.avg_attention ?? 0) + "%";
+
+
+        document.getElementById(
+            "aiQuiz"
+        ).innerText =
+            (data.avg_quiz ?? 0) + "%";
+
+
+        /* =============================================
+           SUMMARY
+        ============================================= */
+
+        summary.innerText =
+            data.summary ||
+            "Learning update generated successfully.";
+
+
+        /* =============================================
+           STRENGTH
+        ============================================= */
+
+        strength.innerText =
+            data.strength ||
+            "The student's learning progress is being monitored.";
+
+
+        /* =============================================
+           ATTENTION
+        ============================================= */
+
+        attention.innerText =
+            data.attention ||
+            "Continue encouraging focused learning sessions.";
+
+
+        /* =============================================
+           RECOMMENDATION
+        ============================================= */
+
+        recommendation.innerText =
+            data.recommendation ||
+            "Encourage regular study and revision.";
+
+
+        /* =============================================
+           ENCOURAGEMENT
+        ============================================= */
+
+        encouragement.innerText =
+            data.encouragement ||
+            "Keep supporting consistent learning habits.";
+
+
+        /* =============================================
+           SUCCESS
+        ============================================= */
+
+        status.innerText =
+            "✨ Learning update generated successfully.";
+
+
+        button.innerText =
+            "✨ Generate New Update";
+
+
+    }
+
+
+    catch(error){
+
+
+        console.error(
+            "PARENT AI ERROR:",
+            error
+        );
+
+
+        summary.innerText =
+            "Unable to generate the learning update right now.";
+
+
+        strength.innerText =
+            "--";
+
+
+        attention.innerText =
+            "--";
+
+
+        recommendation.innerText =
+            "Please try again in a moment.";
+
+
+        encouragement.innerText =
+            "Keep supporting your child's learning journey.";
+
+
+        status.innerText =
+            "❌ " + error.message;
+
+
+        button.innerText =
+            "✨ Try Again";
+
+
+    }
+
+
+    button.disabled =
+        false;
+
+}
+
+</script>
+
+
+</body>
+
+</html>

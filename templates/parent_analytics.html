@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Child Learning Analytics</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(-45deg,#1e3c72,#2a5298,#141e30,#243b55);
+    background-size:400% 400%;
+    animation:gradientBG 15s ease infinite;
+    color:white;
+}
+
+@keyframes gradientBG{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+/* NAV */
+.nav{
+    background:rgba(0,0,0,0.4);
+    backdrop-filter:blur(12px);
+    padding:20px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:600;
+}
+
+.nav a{
+    color:#00ffd5;
+    text-decoration:none;
+}
+
+/* CONTAINER */
+.container{
+    width:95%;
+    max-width:1400px;
+    margin:auto;
+    padding:40px 0;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(18px);
+    padding:35px;
+    border-radius:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    margin-bottom:35px;
+    transition:0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+h2{
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+/* METRICS GRID */
+.metrics{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.metric-box{
+    background:rgba(255,255,255,0.05);
+    padding:20px;
+    border-radius:16px;
+    flex:1;
+    min-width:250px;
+    transition:0.3s ease;
+}
+
+.metric-box:hover{
+    background:rgba(0,255,213,0.15);
+}
+
+.metric-box span{
+    font-size:22px;
+    font-weight:600;
+    display:block;
+    margin-top:5px;
+}
+
+/* CHART CANVAS */
+canvas{
+    margin-top:15px;
+    background:rgba(255,255,255,0.05);
+    border-radius:16px;
+    padding:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="nav">
+    <span>👨‍👩‍👧 Parent Dashboard</span>
+    <a href="/parent">⬅ Back</a>
+</div>
+
+<div class="container">
+
+    <!-- PERFORMANCE OVERVIEW -->
+    <div class="card">
+        <h2>📊 {{ student_name }} Performance Overview</h2>
+
+        <div class="metrics">
+            <div class="metric-box">
+                🎥 Avg Video Completion
+                <span>{{ avg_video }}%</span>
+            </div>
+
+            <div class="metric-box">
+                👀 Avg Attention
+                <span>{{ avg_attention }}%</span>
+            </div>
+
+            <div class="metric-box">
+                📝 Avg Quiz Score
+                <span>{{ avg_quiz }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIDEO CHART -->
+    <div class="card">
+        <h2>🎥 Video Progress by Course</h2>
+        <canvas id="videoChart"></canvas>
+    </div>
+
+    <!-- ATTENTION CHART -->
+    <div class="card">
+        <h2>👀 Attention Level by Course</h2>
+        <canvas id="attentionChart"></canvas>
+    </div>
+
+    <!-- QUIZ CHART -->
+    <div class="card">
+        <h2>📝 Quiz Scores by Course</h2>
+        <canvas id="quizChart"></canvas>
+    </div>
+
+</div>
+
+<script>
+const courseNames = {{ course_names|tojson }};
+const videoData = {{ video_data|tojson }};
+const attentionData = {{ attention_data|tojson }};
+const quizData = {{ quiz_data|tojson }};
+
+const commonOptions = {
+    responsive:true,
+    plugins:{
+        legend:{ labels:{ color:"white" } }
+    },
+    scales:{
+        x:{ ticks:{ color:"white" } },
+        y:{ ticks:{ color:"white" } }
+    }
+};
+
+new Chart(document.getElementById("videoChart"), {
+    type: "bar",
+    data: {
+        labels: courseNames,
+        datasets: [{
+            label: "Video %",
+            data: videoData,
+            backgroundColor:"#00ffd5"
+        }]
+    },
+    options: commonOptions
+});
+
+new Chart(document.getElementById("attentionChart"), {
+    type: "line",
+    data: {
+        labels: courseNames,
+        datasets: [{
+            label: "Attention %",
+            data: attentionData,
+            borderColor:"#00bfff",
+            backgroundColor:"rgba(0,191,255,0.2)",
+            tension:0.4
+        }]
+    },
+    options: commonOptions
+});
+
+new Chart(document.getElementById("quizChart"), {
+    type: "bar",
+    data: {
+        labels: courseNames,
+        datasets: [{
+            label: "Quiz Score",
+            data: quizData,
+            backgroundColor:"#ffcc00"
+        }]
+    },
+    options: commonOptions
+});
+</script>
+
+</body>
+</html>

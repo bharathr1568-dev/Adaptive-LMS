@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ course_name }} | Video Lecture</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Poppins',sans-serif;
+    }
+
+    body{
+        min-height:100vh;
+        background:linear-gradient(-45deg,#1e3c72,#2a5298,#141e30,#243b55);
+        background-size:400% 400%;
+        animation:gradientBG 15s ease infinite;
+        color:white;
+    }
+
+    @keyframes gradientBG{
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
+    }
+
+    /* ================= NAV ================= */
+    .nav{
+        background:rgba(0,0,0,0.4);
+        backdrop-filter:blur(10px);
+        padding:15px 40px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    .nav a{
+        color:#00ffd5;
+        text-decoration:none;
+        font-weight:500;
+    }
+
+    /* ================= CONTAINER ================= */
+    .container{
+    width:95%;
+    max-width:1600px;
+    margin:auto;
+    padding:40px 0;
+}
+
+    .breadcrumb{
+        color:#d1d5db;
+        margin-bottom:15px;
+        font-size:14px;
+    }
+
+    /* ================= CARD ================= */
+    .card{
+    width:100%;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    padding:30px;
+    border-radius:22px;
+    box-shadow:0 15px 60px rgba(0,0,0,0.5);
+    transition:0.3s;
+}
+
+    .card:hover{
+        transform:translateY(-5px);
+    }
+
+    h2{
+        margin-bottom:5px;
+    }
+
+    video{
+    width:100%;
+    height:85vh;   /* Almost full screen */
+}
+
+    /* ================= PROGRESS ================= */
+    .progress-wrapper{
+        width:100%;
+        height:12px;
+        background:rgba(255,255,255,0.2);
+        border-radius:20px;
+        overflow:hidden;
+        margin-top:20px;
+    }
+
+    .progress-bar{
+        height:100%;
+        width:0%;
+        background:linear-gradient(90deg,#00ffd5,#00bfff);
+        transition:width 0.3s ease;
+    }
+
+    #progressText{
+        margin-top:8px;
+        font-size:14px;
+        opacity:0.9;
+    }
+
+    /* ================= ATTENTION BOX ================= */
+    .attention-box{
+        margin-top:20px;
+        padding:12px 15px;
+        border-radius:12px;
+        background:rgba(0,255,213,0.15);
+        border:1px solid rgba(0,255,213,0.3);
+        font-size:14px;
+    }
+
+    /* ================= SUMMARY + QUIZ ================= */
+    #dynamicSummaryContainer .card,
+    #quizContainer .quiz-card{
+        margin-top:20px;
+        animation:fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp{
+        from{opacity:0; transform:translateY(15px);}
+        to{opacity:1; transform:translateY(0);}
+    }
+
+    /* ================= CAMERA FLOAT ================= */
+    #gaze-container{
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        height: 285px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid #00ffd5;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        z-index: 999;
+        background: black;
+        transition:0.3s;
+    }
+
+    #gaze-container:hover{
+        transform:scale(1.05);
+    }
+
+    #gaze-container iframe{
+        width:100%;
+        height:100%;
+        border:none;
+    }
+
+    @media (max-width:768px){
+        #gaze-container{
+            width:250px;
+            height:190px;
+        }
+    }
+
+    /* ================= MOTIVATION POPUP ================= */
+    #motivationBox{
+        position: fixed;
+        top: 25px;
+        right: -400px;
+        width: 280px;
+        background: linear-gradient(45deg,#00ffd5,#00bfff);
+        color: black;
+        padding: 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        z-index: 2000;
+        transition: right 0.5s ease;
+    }
+
+    #motivationBox.show{
+        right:25px;
+    }
+    /* ================= QUIZ FIX ================= */
+
+#quizContainer .quiz-card{
+    background: rgba(15,23,42,0.95);   /* Dark strong background */
+    color: white;
+    padding: 25px;
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+/* Question text */
+#quizContainer h4{
+    color: #ffffff;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Options */
+#quizContainer label{
+    display: block;
+    margin: 8px 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+/* Hover effect */
+#quizContainer label:hover{
+    background: rgba(0,255,213,0.2);
+}
+
+/* Radio buttons */
+#quizContainer input[type="radio"]{
+    accent-color: #00ffd5;
+    margin-right: 8px;
+}
+
+/* ================= SUMMARY FIX ================= */
+
+#dynamicSummaryContainer .card{
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #ffffff !important;
+    opacity: 1 !important;
+    padding: 28px;
+    border-radius: 20px;
+    border-left: 6px solid #00ffd5;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.6);
+}
+/* Summary Title */
+#dynamicSummaryContainer h3,
+#dynamicSummaryContainer h2{
+    color: #00ffd5 !important;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Summary Paragraph */
+#dynamicSummaryContainer p{
+    color: #e2e8f0 !important;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Remove faded effect if inherited */
+#dynamicSummaryContainer *{
+    opacity: 1 !important;
+}
+/* ================= PERFECT VIDEO RATIO ================= */
+
+.video-wrapper{
+    width:100%;
+    max-width:1400px;
+    margin:25px auto;
+    border-radius:22px;
+    overflow:hidden;
+    box-shadow:0 30px 60px rgba(0,0,0,0.6);
+    background:black;
+}
+
+/* Maintain 16:9 ratio automatically */
+.video-wrapper video{
+    width:100%;
+    height:auto;   /* 🔥 important */
+    display:block;
+}
+
+    </style>
+</head>
+
+<body>
+
+<div class="nav">
+    <div>
+        <strong>{{ course_name }}</strong><br>
+        <small>Instructor: {{ teacher_name }}</small>
+    </div>
+    <div>
+        👤 {{ name }} |
+        <a href="/student">Dashboard</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="breadcrumb">
+        Dashboard &gt; {{ course_name }} &gt; Lecture Video
+    </div>
+
+    <div class="card">
+
+        <h2>🎥 Lecture 1: Introduction</h2>
+        <p style="opacity:0.8;">Assigned by <strong>{{ teacher_name }}</strong></p>
+
+        {% if video_path %}
+        <video id="video" controls>
+            <source src="{{ video_path }}" type="video/mp4">
+        </video>
+        {% else %}
+        <p style="color:#ff4d4d;font-weight:bold">
+            🚫 Teacher has not uploaded lecture yet.
+        </p>
+        {% endif %}
+
+        <!-- PROGRESS -->
+        <div class="progress-wrapper">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <p id="progressText">0% completed</p>
+
+        <!-- ATTENTION -->
+        <div id="attentionStatus" class="attention-box">
+            ℹ️ Connecting to Camera AI...
+        </div>
+
+        <div id="dynamicSummaryContainer"></div>
+        <div id="quizContainer"></div>
+
+    </div>
+</div>
+
+<div id="gaze-container">
+    <iframe src="http://127.0.0.1:5000/" allow="camera"></iframe>
+</div>
+
+<div id="motivationBox"></div>
+
+<script src="/static/js/video.js"></script>
+<script src="/static/js/attention.js"></script>
+
+<script>
+initVideoTracking({{ course_id }});
+startAttentionTracking({{ course_id }});
+</script>
+
+</body>
+</html>
