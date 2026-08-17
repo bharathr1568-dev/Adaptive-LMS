@@ -16,7 +16,6 @@ import re
 env_path = Path(__file__).resolve().parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
-print("DEBUG GROK KEY:", os.getenv("GROK_API_KEY"))
 
 # ============================================================
 # 🎤 LOAD WHISPER MODEL (cached after first run)
