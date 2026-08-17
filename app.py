@@ -935,7 +935,7 @@ Rules:
 
         response = client.chat.completions.create(
 
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-8b-instant",
 
             messages=[
                 {
@@ -1604,7 +1604,7 @@ Return ONLY valid JSON in exactly this format:
 
         response = client.chat.completions.create(
 
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-8b-instant",
 
             messages=[
                 {
@@ -2874,7 +2874,7 @@ Rules:
 
         response = client.chat.completions.create(
 
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-8b-instant",
 
             messages=[
                 {
