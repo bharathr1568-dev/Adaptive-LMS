@@ -39,7 +39,9 @@ def init_db():
     db = get_db()
     cur = db.cursor()
 
+    # =====================================================
     # USERS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -51,21 +53,23 @@ def init_db():
     )
     """)
 
+    # =====================================================
     # COURSES
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS courses (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    course_name TEXT,
-    teacher_id INTEGER,
-    video_path TEXT,
-    video_topics TEXT      -- ⭐ AI GENERATED TOPICS
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        course_name TEXT,
+        teacher_id INTEGER,
+        video_path TEXT,
+        video_topics TEXT,
+        video_summary TEXT
     )
     """)
-    
-    
 
-
+    # =====================================================
     # ENROLLMENTS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS enrollments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -74,7 +78,9 @@ def init_db():
     )
     """)
 
+    # =====================================================
     # QUIZZES
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS quizzes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,18 +90,25 @@ def init_db():
     )
     """)
 
+    # =====================================================
     # QUIZ QUESTIONS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS quiz_questions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         quiz_id INTEGER,
         question TEXT,
-        a TEXT, b TEXT, c TEXT, d TEXT,
+        a TEXT,
+        b TEXT,
+        c TEXT,
+        d TEXT,
         correct TEXT
     )
     """)
 
-    # QUIZ RESULTS ⭐ (missing table)
+    # =====================================================
+    # QUIZ RESULTS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS quiz_results (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -105,7 +118,9 @@ def init_db():
     )
     """)
 
+    # =====================================================
     # VIDEO PROGRESS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS video_progress (
         student_id INTEGER,
@@ -117,18 +132,21 @@ def init_db():
     )
     """)
 
+    # =====================================================
     # LECTURE AI DATA
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS lecture_ai (
-    course_id INTEGER PRIMARY KEY,
-    transcript TEXT,
-    summary TEXT,
-    topics TEXT
-)
-""")
+        course_id INTEGER PRIMARY KEY,
+        transcript TEXT,
+        summary TEXT,
+        topics TEXT
+    )
+    """)
 
-
+    # =====================================================
     # ATTENTION LOGS
+    # =====================================================
     cur.execute("""
     CREATE TABLE IF NOT EXISTS attention_logs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -144,9 +162,54 @@ def init_db():
     )
     """)
 
+    # =====================================================
+    # SAVE CHANGES
+    # =====================================================
     db.commit()
     db.close()
 
+
+# ================= DB MIGRATION (RUN ONCE) =================
+# ================= DB MIGRATION =================
+def migrate_db():
+    db = get_db()
+    cur = db.cursor()
+
+    try:
+        # Get existing columns in courses table
+        cur.execute("PRAGMA table_info(courses)")
+        columns = [col[1] for col in cur.fetchall()]
+
+        # Add video_path if missing
+        if "video_path" not in columns:
+            print("Adding video_path column...")
+            cur.execute(
+                "ALTER TABLE courses ADD COLUMN video_path TEXT"
+            )
+
+        # Add video_topics if missing
+        if "video_topics" not in columns:
+            print("Adding video_topics column...")
+            cur.execute(
+                "ALTER TABLE courses ADD COLUMN video_topics TEXT"
+            )
+
+        # Add video_summary if missing
+        if "video_summary" not in columns:
+            print("Adding video_summary column...")
+            cur.execute(
+                "ALTER TABLE courses ADD COLUMN video_summary TEXT"
+            )
+
+        db.commit()
+        print("Database migration completed successfully.")
+
+    except Exception as e:
+        db.rollback()
+        print("Migration error:", e)
+
+    finally:
+        db.close()
 
 
 # ================= LOGIN =================
@@ -187,26 +250,6 @@ def login():
 
     return render_template("login.html")
 
-# ================= DB MIGRATION (RUN ONCE) =================
-def migrate_db():
-    db = get_db()
-    cur = db.cursor()
-
-    try:
-        # Check if column exists
-        cur.execute("PRAGMA table_info(courses)")
-        columns = [col[1] for col in cur.fetchall()]
-
-        if "video_path" not in columns:
-            print("Adding video_path column...")
-            cur.execute("ALTER TABLE courses ADD COLUMN video_path TEXT")
-            db.commit()
-            print("Migration complete!")
-
-    except Exception as e:
-        print("Migration error:", e)
-
-    db.close()
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
