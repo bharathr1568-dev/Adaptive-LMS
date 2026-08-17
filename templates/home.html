@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adaptive-LMS | AI-Powered Learning</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#070b16;--text:#f8fafc;--muted:#94a3b8;--line:rgba(255,255,255,.1);--cyan:#22d3ee;--blue:#6366f1}
+body{min-height:100vh;font-family:Inter,sans-serif;color:var(--text);background:radial-gradient(circle at 15% 15%,rgba(99,102,241,.22),transparent 28%),radial-gradient(circle at 85% 20%,rgba(34,211,238,.14),transparent 25%),radial-gradient(circle at 50% 90%,rgba(168,85,247,.12),transparent 28%),var(--bg);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px}
+a{text-decoration:none;color:inherit}
+nav{width:min(1180px,92%);margin:22px auto 0;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:18px;background:rgba(10,15,28,.68);backdrop-filter:blur(18px);position:relative;z-index:5}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800}
+.brand-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 0 28px rgba(34,211,238,.28)}
+.nav-actions,.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 19px;border-radius:12px;font-weight:600;font-size:14px;transition:.25s;border:1px solid var(--line)}
+.btn:hover{transform:translateY(-2px)}
+.btn-ghost{background:rgba(255,255,255,.04)}
+.btn-primary{color:#04111a;border:none;background:linear-gradient(135deg,#67e8f9,#818cf8);box-shadow:0 8px 30px rgba(99,102,241,.25)}
+.hero{width:min(1180px,92%);min-height:650px;margin:auto;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:55px;padding:65px 0 45px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid rgba(103,232,249,.18);border-radius:999px;background:rgba(34,211,238,.06);color:#a5f3fc;font-size:12px;font-weight:600;margin-bottom:22px}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+h1{font-size:clamp(42px,6vw,76px);line-height:.98;letter-spacing:-4px}
+h1 span{background:linear-gradient(90deg,#67e8f9,#818cf8 55%,#c084fc);-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{margin-top:24px;max-width:650px;color:var(--muted);line-height:1.75;font-size:17px}
+.hero-actions{margin-top:30px}.hero-actions .btn{padding:14px 22px}
+.preview{position:relative}.glow{position:absolute;width:260px;height:260px;right:5%;top:5%;background:rgba(99,102,241,.28);filter:blur(80px);border-radius:50%}
+.dashboard-card{position:relative;padding:18px;border-radius:24px;border:1px solid var(--line);background:linear-gradient(145deg,rgba(20,29,48,.84),rgba(10,15,28,.78));box-shadow:0 30px 90px rgba(0,0,0,.42);transform:rotate(1deg)}
+.window-bar{display:flex;gap:7px;margin-bottom:18px}.window-bar i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25)}
+.ai-header{padding:20px;border-radius:18px;background:linear-gradient(135deg,rgba(99,102,241,.18),rgba(34,211,238,.07));border:1px solid rgba(255,255,255,.08)}
+.ai-header small{color:#a5f3fc}.ai-header h3{margin-top:7px;font-size:23px}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}.stat{padding:17px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.035)}.stat small{color:var(--muted)}.stat strong{display:block;margin-top:7px;font-size:23px}
+.progress{height:7px;border-radius:99px;background:rgba(255,255,255,.08);margin-top:11px;overflow:hidden}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--blue));border-radius:inherit}
+.features,.team{width:min(1180px,92%);margin:20px auto 80px}.section-title{text-align:center;margin-bottom:30px}.section-title h2{font-size:32px;letter-spacing:-1.5px}.section-title p{color:var(--muted);margin-top:9px}
+.feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.feature{padding:25px;border:1px solid var(--line);border-radius:20px;background:rgba(17,24,39,.62);backdrop-filter:blur(14px);transition:.25s}.feature:hover{transform:translateY(-5px);border-color:rgba(103,232,249,.25)}
+.feature-icon{font-size:25px;margin-bottom:17px}.feature h3{font-size:16px;margin-bottom:8px}.feature p{color:var(--muted);line-height:1.6;font-size:13px}
+.team{text-align:center}.team-card{display:inline-block;min-width:280px;padding:22px 28px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.035)}.team-card strong{display:block;font-size:17px;margin-bottom:5px}.team-card span{color:var(--muted);font-size:13px}
+footer{width:min(1180px,92%);margin:auto;padding:25px 0 35px;border-top:1px solid var(--line);text-align:center;color:#64748b;font-size:12px}
+@media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:45px}.feature-grid{grid-template-columns:repeat(2,1fr)}.preview{max-width:650px;margin:auto;width:100%}}
+@media(max-width:560px){.brand span{display:none}h1{letter-spacing:-2.5px}.subtitle{font-size:15px}.feature-grid,.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+<a href="/" class="brand"><div class="brand-icon">✦</div><span>Adaptive-LMS</span></a>
+<div class="nav-actions"><a href="/login" class="btn btn-ghost">Login</a><a href="/register" class="btn btn-primary">Get Started</a></div>
+</nav>
+
+<section class="hero">
+<div>
+<div class="eyebrow"><span class="dot"></span>AI-POWERED LEARNING PLATFORM</div>
+<h1>Learn smarter.<br><span>Adapt faster.</span></h1>
+<p class="subtitle">An intelligent learning management system designed to understand student engagement, personalize learning, and turn learning data into meaningful insights.</p>
+<div class="hero-actions"><a href="/register" class="btn btn-primary">Create an Account →</a><a href="/login" class="btn btn-ghost">Sign in</a></div>
+</div>
+
+<div class="preview">
+<div class="glow"></div>
+<div class="dashboard-card">
+<div class="window-bar"><i></i><i></i><i></i></div>
+<div class="ai-header"><small>✦ INTELLIGENT LEARNING</small><h3>Your learning, understood.</h3></div>
+<div class="stats">
+<div class="stat"><small>Attention</small><strong>92%</strong><div class="progress"><span style="width:92%"></span></div></div>
+<div class="stat"><small>Learning</small><strong>84%</strong><div class="progress"><span style="width:84%"></span></div></div>
+<div class="stat"><small>Quiz Score</small><strong>88%</strong><div class="progress"><span style="width:88%"></span></div></div>
+<div class="stat"><small>Engagement</small><strong>High</strong><div class="progress"><span style="width:90%"></span></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="features">
+<div class="section-title"><h2>Built around the learner</h2><p>One platform connecting learning, engagement and insights.</p></div>
+<div class="feature-grid">
+<div class="feature"><div class="feature-icon">🎯</div><h3>Attention Tracking</h3><p>Monitor learning engagement during video lectures through browser-based attention analysis.</p></div>
+<div class="feature"><div class="feature-icon">🧠</div><h3>AI Insights</h3><p>Turn learning activity and performance data into useful guidance for students, teachers and parents.</p></div>
+<div class="feature"><div class="feature-icon">📝</div><h3>Smart Assessment</h3><p>Use quizzes and performance data to understand how well students are learning.</p></div>
+<div class="feature"><div class="feature-icon">📊</div><h3>Learning Analytics</h3><p>See video progress, attention and quiz performance in one connected learning system.</p></div>
+</div>
+</section>
+
+<section class="team">
+    <div class="section-title">
+        <h2>Built by</h2>
+        <p>Developed by a team of M.Tech students.</p>
+    </div>
+
+    <div class="team-card">
+        <strong>Bharath R</strong>
+        <span>M.Tech Student</span>
+    </div>
+
+    <div class="team-card">
+        <strong>Richard Samuel</strong>
+        <span>M.Tech Student</span>
+    </div>
+
+    <div class="team-card">
+        <strong>Manjunathan</strong>
+        <span>M.Tech Student</span>
+    </div>
+</section>
+
+<footer>
+    © 2026 Adaptive-LMS · All Rights Reserved · Built by Bharath & Team
+</footer>
+<footer>© 2026 Adaptive-LMS · AI-Powered Learning Management System</footer>
+</body>
+</html>

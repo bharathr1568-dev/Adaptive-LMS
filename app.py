@@ -440,8 +440,14 @@ def migrate_db():
         db.close()
 
 
+# ================= LANDING PAGE =================
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+
 # ================= LOGIN =================
-@app.route("/", methods=["GET", "POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
@@ -504,7 +510,7 @@ def register():
         except sqlite3.IntegrityError:
             return "User already exists"
 
-        return redirect("/")
+        return redirect("/login")
 
     return render_template("register.html")
 
