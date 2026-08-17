@@ -261,7 +261,16 @@ app.secret_key = "college_lms_secret"
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # ================= DB =================
 def get_db():
-    return sqlite3.connect("database.db")
+    db = sqlite3.connect(
+        "database.db",
+        timeout=30,
+        check_same_thread=False
+    )
+
+    db.execute("PRAGMA busy_timeout = 30000")
+    db.execute("PRAGMA journal_mode = WAL")
+
+    return db
 # ================= CREATE TABLES (RUN ONCE) =================
 def init_db():
     db = get_db()
