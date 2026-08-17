@@ -1622,19 +1622,11 @@ def teacher_upload_video(course_id):
     # =====================================================
     # 🤖 STEP 1 — AI VIDEO ANALYSIS (AUTO RUN)
     # =====================================================
-    try:
-        from video_ai import process_video
-        topics, summary = process_video(save_path)
+    
+    topics = "Video AI analysis will be enabled later."
+    summary = "Video uploaded successfully. AI analysis is temporarily disabled."
 
-        print("\n===== VIDEO AI ANALYSIS =====")
-        print("Topics:", topics)
-        print("Summary:", summary)
-        print("=============================\n")
-
-    except Exception as e:
-        print("Video AI failed:", e)
-        topics = "AI processing failed"
-        summary = "AI processing failed"
+    print("Video AI skipped - Phase 1 Render deployment")
 
     # =====================================================
     # 💾 STEP 2 — SAVE VIDEO PATH + AI DATA IN DATABASE
