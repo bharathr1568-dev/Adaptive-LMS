@@ -6,7 +6,6 @@ import sqlite3
 import json
 import moviepy.video.io.VideoFileClip as mp
 from groq import Groq
-import whisper
 
 # =====================================================
 # FFmpeg configuration
@@ -25,7 +24,6 @@ else:
     print("WARNING: FFmpeg not found:", FFMPEG_PATH)
 
 
-whisper_model = whisper.load_model("base")
 app = Flask(__name__)
 # ================= GROK AI CONFIG =================
 # ================= GROK AI CONFIG =================
@@ -1536,7 +1534,7 @@ def video_progress():
 
 import os
 from werkzeug.utils import secure_filename
-from video_ai import process_video   # ⭐ AI VIDEO ANALYSIS
+#from video_ai import process_video   # ⭐ AI VIDEO ANALYSIS
 UPLOAD_FOLDER = "static/videos"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -1545,7 +1543,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 # =====================================================
 import os
 from werkzeug.utils import secure_filename
-from video_ai import process_video   # AI video analyzer
+#from video_ai import process_video   # AI video analyzer
 
 UPLOAD_FOLDER = "static/videos"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -1582,6 +1580,7 @@ def teacher_upload_video(course_id):
     # 🤖 STEP 1 — AI VIDEO ANALYSIS (AUTO RUN)
     # =====================================================
     try:
+        from video_ai import process_video
         topics, summary = process_video(save_path)
 
         print("\n===== VIDEO AI ANALYSIS =====")
@@ -2791,6 +2790,8 @@ def generate_summary():
         video.close()
 
         # 2️⃣ Transcribe using Whisper
+        import whisper
+        whisper_model = whisper.load_model("base")
         result = whisper_model.transcribe(audio_path)
         transcript = result["text"]
 
