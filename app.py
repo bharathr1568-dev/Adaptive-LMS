@@ -3523,8 +3523,8 @@ def parent_child_analytics(student_id):
 
         quiz_data=quiz_data
     )
+init_db()      # create tables
+migrate_db()   # update old tables
 if __name__ == "__main__":
-    init_db()      # create tables
-    migrate_db()   # update old tables
     app.run(host="127.0.0.1", port=5002, debug=True)
 
