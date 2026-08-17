@@ -1,11 +1,15 @@
 import os
 import shutil
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import sqlite3
 import json
 import moviepy.video.io.VideoFileClip as mp
 from groq import Groq
+import cv2
+import numpy as np
+import time
+from collections import deque
 
 # =====================================================
 # FFmpeg configuration
@@ -25,6 +29,230 @@ else:
 
 
 app = Flask(__name__)
+
+# =====================================================
+# BROWSER-BASED ATTENTION DETECTOR
+# =====================================================
+# This replaces the old standalone gaze_detector.py webcam
+# process. The browser sends camera frames to /attention-frame.
+# IMPORTANT: do NOT use cv2.VideoCapture(0) on Render.
+
+blink_events = deque(maxlen=60)
+eye_missing_frames = 0
+head_buffer = deque(maxlen=30)
+
+BLINK_MISS_FRAMES = 4
+BLINK_EVAL_DELAY = 5.0
+BLINK_HIGH_THRESHOLD = 8
+
+STATE_DELAY = 3.0
+CURRENT_STATE = "ATTENTIVE"
+STATE_START = time.time()
+
+LATEST_ATTENTION = {
+    "state": "ATTENTIVE",
+    "gaze": "NA",
+    "blink": "NORMAL",
+    "head": "UPRIGHT",
+    "face": "ABSENT",
+    "emotion": "NEUTRAL"
+}
+
+
+face_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+)
+
+eye_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_eye.xml"
+)
+
+
+def eye_gaze(face_center_x, frame_w):
+    center_margin = frame_w * 0.18
+    return "CENTER" if abs(face_center_x - frame_w // 2) < center_margin else "AWAY"
+
+
+def blink_rate(eyes_found):
+    global eye_missing_frames
+
+    if not eyes_found:
+        eye_missing_frames += 1
+    else:
+        if eye_missing_frames >= BLINK_MISS_FRAMES:
+            blink_events.append(time.time())
+        eye_missing_frames = 0
+
+    now = time.time()
+    recent = [
+        t for t in blink_events
+        if now - t < BLINK_EVAL_DELAY
+    ]
+
+    return (
+        "HIGH"
+        if len(recent) >= BLINK_HIGH_THRESHOLD
+        else "NORMAL"
+    )
+
+
+def head_posture(y, h, frame_h):
+    face_bottom = y + h
+    down = face_bottom > frame_h * 0.80
+
+    head_buffer.append(1 if down else 0)
+
+    if sum(head_buffer) > 18:
+        return "DOWN"
+
+    return "UPRIGHT"
+
+
+def raw_attention_state(gaze, blink, head):
+    if blink == "HIGH" and head == "DOWN":
+        return "DROWSY"
+
+    if gaze == "AWAY":
+        return "DISTRACTED"
+
+    return "ATTENTIVE"
+
+
+def stabilize_attention(new_state):
+    global CURRENT_STATE, STATE_START
+
+    now = time.time()
+
+    if new_state != CURRENT_STATE:
+        if now - STATE_START >= STATE_DELAY:
+            CURRENT_STATE = new_state
+            STATE_START = now
+    else:
+        STATE_START = now
+
+    return CURRENT_STATE
+
+
+def process_attention_frame(frame_bytes):
+    """
+    Process one JPEG/PNG frame sent by the student's browser.
+    Returns the same attention fields previously exposed by
+    gaze_detector.py.
+    """
+    global LATEST_ATTENTION
+
+    if not frame_bytes:
+        return LATEST_ATTENTION
+
+    array = np.frombuffer(frame_bytes, dtype=np.uint8)
+    frame = cv2.imdecode(array, cv2.IMREAD_COLOR)
+
+    if frame is None:
+        return {
+            **LATEST_ATTENTION,
+            "error": "Invalid image frame"
+        }
+
+    frame = cv2.resize(frame, (640, 480))
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+    faces = face_cascade.detectMultiScale(
+        gray,
+        scaleFactor=1.2,
+        minNeighbors=5,
+        minSize=(80, 80)
+    )
+
+    if len(faces) == 0:
+        # Keep the last state briefly instead of immediately
+        # marking the student distracted.
+        LATEST_ATTENTION = {
+            "state": CURRENT_STATE,
+            "gaze": "NA",
+            "blink": "NORMAL",
+            "head": "NA",
+            "face": "ABSENT",
+            "emotion": "NEUTRAL"
+        }
+        return LATEST_ATTENTION
+
+    x, y, w, h = faces[0]
+    face_gray = gray[y:y + h, x:x + w]
+
+    eyes = eye_cascade.detectMultiScale(
+        face_gray,
+        scaleFactor=1.1,
+        minNeighbors=3
+    )
+
+    gaze = eye_gaze(
+        x + w // 2,
+        frame.shape[1]
+    )
+
+    blink = blink_rate(len(eyes) > 0)
+
+    head = head_posture(
+        y,
+        h,
+        frame.shape[0]
+    )
+
+    final_state = stabilize_attention(
+        raw_attention_state(
+            gaze,
+            blink,
+            head
+        )
+    )
+
+    LATEST_ATTENTION = {
+        "state": final_state,
+        "gaze": gaze,
+        "blink": blink,
+        "head": head,
+        "face": "PRESENT",
+        "emotion": "NEUTRAL"
+    }
+
+    return LATEST_ATTENTION
+
+
+@app.route("/attention-state")
+def attention_state():
+    return jsonify(LATEST_ATTENTION)
+
+
+@app.route("/attention-frame", methods=["POST"])
+def attention_frame():
+    """
+    Browser sends a camera frame here.
+
+    Accepts:
+      1. raw image bytes with Content-Type image/jpeg
+      2. multipart/form-data field named 'frame'
+    """
+    if "user_id" not in session:
+        return jsonify({"error": "Not logged in"}), 401
+
+    frame_bytes = None
+
+    uploaded = request.files.get("frame")
+    if uploaded:
+        frame_bytes = uploaded.read()
+    else:
+        frame_bytes = request.get_data()
+
+    try:
+        result = process_attention_frame(frame_bytes)
+        return jsonify(result)
+    except Exception as e:
+        print("Attention frame error:", e)
+        return jsonify({
+            "error": "Attention processing failed"
+        }), 500
+
+
 # ================= GROK AI CONFIG =================
 # ================= GROK AI CONFIG =================
 GROK_API_KEY = os.getenv("GROK_API_KEY")
@@ -3561,5 +3789,10 @@ def parent_child_analytics(student_id):
 init_db()      # create tables
 migrate_db()   # update old tables
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5002, debug=True)
+    port = int(os.environ.get("PORT", 5002))
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=True
+    )
 

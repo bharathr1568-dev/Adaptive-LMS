@@ -146,10 +146,45 @@
         transform:scale(1.05);
     }
 
-    #gaze-container iframe{
+
+    #gaze-container{
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 380px;
+        height: 285px;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 3px solid #00ffd5;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        z-index: 999;
+        background: black;
+        transition:0.3s;
+    }
+
+    #gaze-container:hover{
+        transform:scale(1.05);
+    }
+
+    #gazeCamera{
         width:100%;
         height:100%;
-        border:none;
+        object-fit:cover;
+        display:block;
+        transform:scaleX(-1);
+    }
+
+    #cameraStatus{
+        position:absolute;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        padding:7px 10px;
+        border-radius:8px;
+        background:rgba(0,0,0,0.65);
+        color:white;
+        font-size:12px;
+        text-align:center;
     }
 
     @media (max-width:768px){
@@ -321,13 +356,154 @@
 </div>
 
 <div id="gaze-container">
-    <iframe src="http://127.0.0.1:5000/" allow="camera"></iframe>
+    <video id="gazeCamera" autoplay muted playsinline></video>
+    <canvas id="gazeCanvas" style="display:none;"></canvas>
+    <div id="cameraStatus">📷 Starting camera...</div>
 </div>
 
 <div id="motivationBox"></div>
 
 <script src="/static/js/video.js"></script>
-<script src="/static/js/attention.js"></script>
+
+
+<script>
+async function startAttentionTracking(courseId) {
+    const camera = document.getElementById("gazeCamera");
+    const canvas = document.getElementById("gazeCanvas");
+    const statusBox = document.getElementById("attentionStatus");
+    const cameraStatus = document.getElementById("cameraStatus");
+
+    if (!camera || !canvas) {
+        console.error("Attention camera elements not found.");
+        return;
+    }
+
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+                width: { ideal: 640 },
+                height: { ideal: 480 },
+                facingMode: "user"
+            },
+            audio: false
+        });
+
+        camera.srcObject = stream;
+        cameraStatus.textContent = "📷 Camera active";
+        statusBox.textContent = "🔎 Attention AI connected";
+
+        // Wait until the browser has a usable video frame.
+        await new Promise(resolve => {
+            if (camera.readyState >= 2) {
+                resolve();
+            } else {
+                camera.onloadeddata = resolve;
+            }
+        });
+
+        canvas.width = 640;
+        canvas.height = 480;
+
+        let busy = false;
+        let lastSaved = 0;
+        let lastResult = null;
+
+        async function sendAttentionFrame() {
+            if (busy || camera.readyState < 2) return;
+
+            busy = true;
+
+            try {
+                ctx.drawImage(camera, 0, 0, canvas.width, canvas.height);
+
+                const blob = await new Promise(resolve =>
+                    canvas.toBlob(resolve, "image/jpeg", 0.65)
+                );
+
+                if (!blob) return;
+
+                const response = await fetch("/attention-frame", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "image/jpeg"
+                    },
+                    body: blob,
+                    credentials: "same-origin"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Attention server returned " + response.status);
+                }
+
+                const result = await response.json();
+                lastResult = result;
+
+                if (result.error) {
+                    statusBox.textContent = "⚠️ " + result.error;
+                    return;
+                }
+
+                const state = result.state || "UNKNOWN";
+                const gaze = result.gaze || "NA";
+                const blink = result.blink || "NORMAL";
+                const head = result.head || "NA";
+                const face = result.face || "NA";
+
+                statusBox.textContent =
+                    "🎯 " + state +
+                    " | Gaze: " + gaze +
+                    " | Head: " + head;
+
+                cameraStatus.textContent =
+                    "📷 " + face + " • " + state;
+
+                // Save an attention log periodically rather than on every frame.
+                const now = Date.now();
+
+                if (now - lastSaved >= 5000) {
+                    lastSaved = now;
+
+                    await fetch("/save-attention", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        credentials: "same-origin",
+                        body: JSON.stringify({
+                            course_id: courseId,
+                            state: state,
+                            gaze: gaze,
+                            blink: blink,
+                            head: head,
+                            face: face,
+                            emotion: result.emotion || "NEUTRAL"
+                        })
+                    });
+                }
+
+            } catch (error) {
+                console.error("Attention tracking error:", error);
+                statusBox.textContent = "⚠️ Camera AI connection failed";
+                cameraStatus.textContent = "⚠️ Attention unavailable";
+            } finally {
+                busy = false;
+            }
+        }
+
+        // One frame roughly every second.
+        setInterval(sendAttentionFrame, 1000);
+        sendAttentionFrame();
+
+    } catch (error) {
+        console.error("Camera permission/error:", error);
+        cameraStatus.textContent = "⚠️ Camera permission required";
+        statusBox.textContent =
+            "⚠️ Please allow camera access for attention tracking.";
+    }
+}
+</script>
 
 <script>
 initVideoTracking({{ course_id }});
